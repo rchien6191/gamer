@@ -10,9 +10,10 @@ class Player(Sprite):
     def __init__(self):
         Sprite.__init__(self)
         self.image = pg.Surface((30, 30))
-        self.image.fill(BLACK)
+        self.image.fill(RED)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH/2, HEIGHT/2)
+        #The above will be replaced with a proper sprite at some point
         # self.pos = vec(WIDTH/2, HEIGHT/2)
         # self.velo = vec(0, 0)
         # self.accel = vec(0,0)
@@ -33,22 +34,26 @@ class Player(Sprite):
             self.falling = False
             self.vy = 0
             self.rect.y = HEIGHT-30
-            print("Falling" + str(self.falling))
+            #print("Falling" + str(self.falling))
     def update(self):
         self.vx = 0
-        #self.vy = 0
-        self.gravity()
-        #self.jumping()
+        self.vy = 0
+        #self.gravity()
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
             self.vx = -7
         if keys[pg.K_RIGHT]:
             self.vx = 7
-        if keys[pg.K_UP] and self.falling == False:
-            self.jumping()
+        if keys[pg.K_UP]:
+            self.vy = -7
+        if keys[pg.K_DOWN]:
+            self.vy = 7
+            #self.jumping()
+        # else:
+        #     self.vx = 0
+        #     self.vy = 0
         self.rect.x += self.vx
         self.rect.y += self.vy
-        # if self.rect.colliderect(Platforms.rect):
 
 
 

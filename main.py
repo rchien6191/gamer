@@ -1,6 +1,5 @@
 #This file is by Robert Chien
 #Some material taken from KidsCanCode and Mr. Cozort
-#Now on github
 
 import pygame as pg
 import random
@@ -14,15 +13,15 @@ class Game:
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-        pg.display.set_caption("jumping")
+        pg.display.set_caption("flying")
         self.clock = pg.time.Clock()
         self.running = True
     def new(self):
         self.all_sprites = pg.sprite.Group()
         self.player = Player()
-        self.platform = Platforms()
+        #self.platform = Platforms()
         self.all_sprites.add(self.player)
-        self.all_sprites.add(self.platform)
+        #self.all_sprites.add(self.platform)
         self.run()
         #New player element
     def run(self):
@@ -44,7 +43,7 @@ class Game:
                 self.running = False
         #Listening for user input/events
     def draw(self):
-        self.screen.fill(RED)
+        self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
         pg.display.flip()
     def show_start_screen(self):
