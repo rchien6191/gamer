@@ -1,4 +1,5 @@
 #Sprites for the game!
+#Taken from kenney.nl
 
 import pygame as pg
 from pygame.sprite import Sprite
@@ -9,36 +10,24 @@ import math
 class Player(Sprite):
     def __init__(self):
         Sprite.__init__(self)
+        #self.image = pg.image.load("C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\spaceShips_008.png")
         self.image = pg.Surface((30, 30))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH/2, HEIGHT/2)
         #The above will be replaced with a proper sprite at some point
-        # self.pos = vec(WIDTH/2, HEIGHT/2)
-        # self.velo = vec(0, 0)
-        # self.accel = vec(0,0)
+        #Sprite will be implemented at some point
         self.accel = 3.95
         self.vx = 0
         self.vy = 0
         self.falling = False
-    def jumping(self):
-        self.vy = -50
-        print("jump called")
-        self.falling = True
-    def gravity(self):
-        if self.rect.y < HEIGHT-30:
-            self.falling = True
-            self.vy += self.accel
-            #print("Falling" + str(self.falling))
-        elif self.rect.y > HEIGHT:
-            self.falling = False
-            self.vy = 0
-            self.rect.y = HEIGHT-30
-            #print("Falling" + str(self.falling))
+    # def jumping(self):
+    #     self.vy = -50
+    #     print("jump called")
+    #     self.falling = True
     def update(self):
         self.vx = 0
         self.vy = 0
-        #self.gravity()
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
             self.vx = -7
