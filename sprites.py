@@ -6,15 +6,16 @@ from pygame.sprite import Sprite
 import random
 from settings import *
 import math
+from os import path
 
 class Player(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        #self.image = pg.image.load("C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\spaceShips_008.png")
+        self.image = pg.image.load("_images/playership.gif")
         self.image = pg.Surface((30, 30))
-        self.image.fill(RED)
-        self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH/2, HEIGHT/2)
+        #self.image.fill(RED)
+        self.sprite = self.image.get_image()
+        self.image.center = (WIDTH/2, HEIGHT/2)
         #The above will be replaced with a proper sprite at some point
         #Sprite will be implemented at some point
         self.accel = 3.95
@@ -46,12 +47,18 @@ class Player(Sprite):
 
 
 
-class Platforms(Sprite):
+class Stars(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        self.image = pg.Surface((60, 20))
+        self.image = pg.Surface((5, 5))
         self.image.fill(WHITE)
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH/2, HEIGHT/2)
-        self.vx = 0
+        self.rect.center = (WIDTH/2, HEIGHT-20)
         self.vy = 0
+    def update(self):
+        self.vy = 30
+        if self.rect.y <= 0:
+            self.rect.y == HEIGHT+20
+            self.vy = 30
+            self.rect.y += self.vy
+        self.rect.y += self.vy

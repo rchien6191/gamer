@@ -1,6 +1,6 @@
 TITLE = "shoot game"
 
-WIDTH = 500
+WIDTH = 600
 HEIGHT = 600
 FPS = 30
 WHITE = (255, 255, 255)

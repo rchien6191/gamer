@@ -1,10 +1,16 @@
 #This file is by Robert Chien
 #Some material taken from KidsCanCode and Mr. Cozort
+#http://kidscancode.org/blog/2016/08/pygame_shmup_part_4/ <--- see this!
 
 import pygame as pg
 import random
 from settings import *
 from sprites import *
+from os import path
+
+img_dir = path.join(path.dirname(__file__), '_images')
+player_img = pg.image.load(path.join(img_dir, "playership.png")).convert()
+
 
 class Game:
     def __init__(self):
@@ -19,9 +25,9 @@ class Game:
     def new(self):
         self.all_sprites = pg.sprite.Group()
         self.player = Player()
-        #self.platform = Platforms()
+        self.stars = Stars()
         self.all_sprites.add(self.player)
-        #self.all_sprites.add(self.platform)
+        self.all_sprites.add(self.stars)
         self.run()
         #New player element
     def run(self):
