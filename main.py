@@ -8,9 +8,8 @@ from settings import *
 from sprites import *
 from os import path
 
-img_dir = path.join(path.dirname(__file__), '_images')
-player_img = pg.image.load(path.join(img_dir, "playership.png")).convert()
-
+#img_dir = path.join(path.dirname(__file__), '_images')
+#player_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\playership.gif')
 
 class Game:
     def __init__(self):
@@ -25,9 +24,13 @@ class Game:
     def new(self):
         self.all_sprites = pg.sprite.Group()
         self.player = Player()
-        self.stars = Stars()
+        for i in range(20):
+            m = Stars()
+            self.all_sprites.add(m)
+        for i in range (8):   
+            r = Rocks()
+            self.all_sprites.add(r)
         self.all_sprites.add(self.player)
-        self.all_sprites.add(self.stars)
         self.run()
         #New player element
     def run(self):

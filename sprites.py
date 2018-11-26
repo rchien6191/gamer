@@ -4,6 +4,7 @@
 import pygame as pg
 from pygame.sprite import Sprite
 import random
+#import main
 from settings import *
 import math
 from os import path
@@ -11,11 +12,14 @@ from os import path
 class Player(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        self.image = pg.image.load("_images/playership.gif")
+        #self.image = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\playership.gif')
         self.image = pg.Surface((30, 30))
-        #self.image.fill(RED)
-        self.sprite = self.image.get_image()
-        self.image.center = (WIDTH/2, HEIGHT/2)
+        #self.sprite = player_img
+        
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        #self.sprite = self.image.get_image()
+        self.rect.center = (WIDTH/2, HEIGHT/2)
         #The above will be replaced with a proper sprite at some point
         #Sprite will be implemented at some point
         self.accel = 3.95
@@ -44,6 +48,10 @@ class Player(Sprite):
         #     self.vy = 0
         self.rect.x += self.vx
         self.rect.y += self.vy
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
 
 
 
@@ -53,12 +61,29 @@ class Stars(Sprite):
         self.image = pg.Surface((5, 5))
         self.image.fill(WHITE)
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH/2, HEIGHT-20)
-        self.vy = 0
+        self.rect.x = random.randrange(WIDTH - self.rect.width)
+        self.rect.y = random.randrange(-600, 0)
+        self.vy = random.randrange(25, 28)
     def update(self):
-        self.vy = 30
-        if self.rect.y <= 0:
-            self.rect.y == HEIGHT+20
-            self.vy = 30
-            self.rect.y += self.vy
         self.rect.y += self.vy
+        if self.rect.top > HEIGHT + 10:
+            self.rect.x = random.randrange(WIDTH - self.rect.width)
+            self.rect.y = random.randrange(-100, -40)
+            self.vy = random.randrange(25, 29)
+
+
+class Rocks(Sprite):
+    def __init__(self):
+        Sprite.__init__(self)
+        self.image = pg.Surface((40, 40))
+        self.image.fill(BLUE)
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randrange(WIDTH - self.rect.width)
+        self.rect.y = random.randrange(-450, -50)
+        self.vy = random.randrange(3, 8)
+    def update(self):
+        self.rect.y += self.vy
+        if self.rect.top > HEIGHT + 10:
+            self.rect.x = random.randrange(WIDTH - self.rect.width)
+            self.rect.y = random.randrange(-450, -50)
+            self.vy = random.randrange(3, 8)
