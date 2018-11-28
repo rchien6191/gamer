@@ -22,15 +22,22 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
     def new(self):
+        self.playersprite = pg.sprite.Group()
         self.all_sprites = pg.sprite.Group()
+        self.enemies = pg.sprite.Group()
         self.player = Player()
+        self.pbullets = PBullet()
+        #Fix
         for i in range(20):
             m = Stars()
             self.all_sprites.add(m)
         for i in range (8):   
-            r = Rocks()
+            r = SmallRocks()
+            self.enemies.add(r)
             self.all_sprites.add(r)
+        self.playersprite.add(self.player)
         self.all_sprites.add(self.player)
+        self.all_sprites.add(self.pbullets)
         self.run()
         #New player element
     def run(self):
@@ -43,6 +50,9 @@ class Game:
         #Game loop
     def update(self):
         self.all_sprites.update()
+        hits = pg.sprite.spritecollide(self.player, self.enemies, False)
+        if hits:
+            print("took damage")
         #Update things
     def events(self):
         for event in pg.event.get():
