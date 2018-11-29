@@ -26,7 +26,10 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.player = Player()
-        self.pbullets = PBullet()
+        #self.pbullet = PBullet(x, y)
+        self.pbullets = pg.sprite.Group()
+        # self.all_sprites.add(pbullet)
+        # self.pbullets.add(pbullet)
         #Fix
         for i in range(20):
             m = Stars()
@@ -37,7 +40,6 @@ class Game:
             self.all_sprites.add(r)
         self.playersprite.add(self.player)
         self.all_sprites.add(self.player)
-        self.all_sprites.add(self.pbullets)
         self.run()
         #New player element
     def run(self):
@@ -60,6 +62,9 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
+            # if event.type == pg.KEYDOWN:
+            #     if event.key == pg.K_SPACE:
+            #         Player.shoot(Player)
         #Listening for user input/events
     def draw(self):
         self.screen.fill(BLACK)
