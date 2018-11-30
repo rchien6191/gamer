@@ -51,7 +51,7 @@ class Game:
         #Game loop
     def update(self):
         self.all_sprites.update()
-        keys = pg.key.get_pressed()
+        #keys = pg.key.get_pressed()
         hits = pg.sprite.spritecollide(self.player, self.enemies, False)
         bullethits = pg.sprite.spritecollide(self.pbullet, self.enemies, False)
         if hits:
