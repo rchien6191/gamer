@@ -26,10 +26,9 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.player = Player()
-        #self.pbullet = PBullet(x, y)
+        self.pbullet = PBullet()
         self.pbullets = pg.sprite.Group()
-        # self.all_sprites.add(pbullet)
-        # self.pbullets.add(pbullet)
+        
         #Fix
         for i in range(20):
             m = Stars()
@@ -46,25 +45,43 @@ class Game:
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
-            self.events()
             self.update()
+            self.events()
             self.draw()
         #Game loop
     def update(self):
         self.all_sprites.update()
+        keys = pg.key.get_pressed()
         hits = pg.sprite.spritecollide(self.player, self.enemies, False)
+        bullethits = pg.sprite.spritecollide(self.pbullet, self.enemies, False)
         if hits:
             print("took damage")
+        if bullethits:
+            print("hit")
+        # if keys[pg.K_SPACE]:
+        #     self.shoot()
+            
+        #     self.all_sprites.add(self.pbullet)
+        #     self.pbullets.add(self.pbullet)
+        
         #Update things
+    def shoot(self):
+        bullet = PBullet()
+        print("bang")
+        
+        self.all_sprites.add(bullet)
+        self.pbullets.add(bullet)
+    
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 if self.playing:
                     self.playing = False
                 self.running = False
-            # if event.type == pg.KEYDOWN:
-            #     if event.key == pg.K_SPACE:
-            #         Player.shoot(Player)
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    self.shoot()
+        
         #Listening for user input/events
     def draw(self):
         self.screen.fill(BLACK)

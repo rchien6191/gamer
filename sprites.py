@@ -15,7 +15,6 @@ class Player(Sprite):
         #self.image = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\playership.gif')
         self.image = pg.Surface((30, 30))
         #self.sprite = player_img
-        
         self.image.fill(RED)
         self.rect = self.image.get_rect()
         #self.sprite = self.image.get_image()
@@ -25,10 +24,11 @@ class Player(Sprite):
         self.vx = 0
         self.vy = 0
 
-    def shoot(self):
-        bullet = PBullet(self.rect.x, self.rect.y)
-        Game.all_sprites.add(bullet)
-        Game.pbullets.add(bullet)
+    # def shoot(self):
+    #     bullet = PBullet()
+    #     print("bang")
+    #     # Game.all_sprites.add(bullet)
+    #     # Game.pbullets.add(bullet)
 
     def update(self):
         self.vx = 0
@@ -42,8 +42,8 @@ class Player(Sprite):
             self.vy = -7
         if keys[pg.K_DOWN]:
             self.vy = 7
-        if keys[pg.K_SPACE]:
-            self.shoot()
+        # if keys[pg.K_SPACE]:
+        #     self.shoot()
         self.rect.x += self.vx
         self.rect.y += self.vy
         if self.rect.right > WIDTH:
@@ -52,14 +52,14 @@ class Player(Sprite):
             self.rect.left = 0
 
 class PBullet(Sprite):
-    def __init__(self, x, y):
+    def __init__(self):
         Sprite.__init__(self)
-        self.image = pg.Surface((3, 5))
+        self.image = pg.Surface((5, 5))
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
-        self.rect.bottom = y
-        self.rect.centerx = x
-        self.vy = -15
+        self.rect.bottom = self.rect.y
+        self.rect.centerx = self.rect.x
+        self.vy = -10
     def update(self):
         self.rect.y += self.vy
         if self.rect.y < 0 :
