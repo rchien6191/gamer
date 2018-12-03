@@ -26,10 +26,9 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.player = Player()
-        self.pbullet = PBullet()
+        self.enemy1 = Enemy1()
+        self.bullet = PBullet(self.player.rect.centerx, self.player.rect.top)
         self.pbullets = pg.sprite.Group()
-        
-        #Fix
         for i in range(20):
             m = Stars()
             self.all_sprites.add(m)
@@ -37,6 +36,10 @@ class Game:
             r = SmallRocks()
             self.enemies.add(r)
             self.all_sprites.add(r)
+        for i in range (7):
+            s = Enemy1()
+            self.enemies.add(s)
+            self.all_sprites.add(s)
         self.playersprite.add(self.player)
         self.all_sprites.add(self.player)
         self.run()
@@ -45,19 +48,19 @@ class Game:
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
-            self.update()
             self.events()
+            self.update()
             self.draw()
         #Game loop
     def update(self):
         self.all_sprites.update()
         #keys = pg.key.get_pressed()
         hits = pg.sprite.spritecollide(self.player, self.enemies, False)
-        bullethits = pg.sprite.spritecollide(self.pbullet, self.enemies, False)
+        bullethits = pg.sprite.spritecollideany(self.bullet, self.enemies, False)
         if hits:
             print("took damage")
         if bullethits:
-            print("hit")
+            print(bullethits)
         # if keys[pg.K_SPACE]:
         #     self.shoot()
             
@@ -66,12 +69,11 @@ class Game:
         
         #Update things
     def shoot(self):
-        bullet = PBullet()
-        print("bang")
-        
-        self.all_sprites.add(bullet)
+        bullet = PBullet(self.player.rect.centerx, self.player.rect.top)
         self.pbullets.add(bullet)
-    
+        self.all_sprites.add(bullet)
+        
+        print("shotfired " + str(self.player.rect.centerx) + " " + str(self.player.rect.top))
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:

@@ -52,9 +52,9 @@ class Player(Sprite):
             self.rect.left = 0
 
 class PBullet(Sprite):
-    def __init__(self):
+    def __init__(self, x, y):
         Sprite.__init__(self)
-        self.image = pg.Surface((5, 5))
+        self.image = pg.Surface((5, 10))
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
         self.rect.bottom = self.rect.y
@@ -89,6 +89,22 @@ class SmallRocks(Sprite):
         Sprite.__init__(self)
         self.image = pg.Surface((40, 40))
         self.image.fill(BLUE)
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randrange(WIDTH - self.rect.width)
+        self.rect.y = random.randrange(-450, -50)
+        self.vy = random.randrange(3, 8)
+    def update(self):
+        self.rect.y += self.vy
+        if self.rect.top > HEIGHT + 10:
+            self.rect.x = random.randrange(WIDTH - self.rect.width)
+            self.rect.y = random.randrange(-450, -50)
+            self.vy = random.randrange(3, 8)
+
+class Enemy1(Sprite):
+    def __init__(self):
+        Sprite.__init__(self)
+        self.image = pg.Surface((30, 30))
+        self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(WIDTH - self.rect.width)
         self.rect.y = random.randrange(-450, -50)
