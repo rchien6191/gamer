@@ -59,7 +59,7 @@ class PBullet(Sprite):
         self.rect = self.image.get_rect()
         self.rect.bottom = self.rect.y
         self.rect.centerx = self.rect.x
-        self.vy = -10
+        self.vy = -20
     def update(self):
         self.rect.y += self.vy
         if self.rect.y < 0 :
@@ -88,6 +88,22 @@ class SmallRocks(Sprite):
     def __init__(self):
         Sprite.__init__(self)
         self.image = pg.Surface((40, 40))
+        self.image.fill(BLUE)
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randrange(WIDTH - self.rect.width)
+        self.rect.y = random.randrange(-450, -50)
+        self.vy = random.randrange(3, 8)
+    def update(self):
+        self.rect.y += self.vy
+        if self.rect.top > HEIGHT + 10:
+            self.rect.x = random.randrange(WIDTH - self.rect.width)
+            self.rect.y = random.randrange(-450, -50)
+            self.vy = random.randrange(3, 8)
+
+class BigRocks(Sprite):
+    def __init__(self):
+        Sprite.__init__(self)
+        self.image = pg.Surface((50, 50))
         self.image.fill(BLUE)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(WIDTH - self.rect.width)

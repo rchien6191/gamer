@@ -22,9 +22,14 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
     def new(self):
+        self.score = 0
         self.playersprite = pg.sprite.Group()
         self.all_sprites = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
+        
+        self.obstacles = pg.sprite.Group()
+        self.indestruct = pg.sprite.Group()
+        
         self.player = Player()
         self.enemy1 = Enemy1()
         self.bullet = PBullet(self.player.rect.centerx, self.player.rect.top)
@@ -36,9 +41,14 @@ class Game:
             r = SmallRocks()
             self.enemies.add(r)
             self.all_sprites.add(r)
+        # for i in range (3):
+        #     b = BigRocks()
+        #     self.all_sprites.add(b)
+        #     self.indestruct.add(b)
         for i in range (7):
             s = Enemy1()
             self.enemies.add(s)
+            self.obstacles.add(s)
             self.all_sprites.add(s)
         self.playersprite.add(self.player)
         self.all_sprites.add(self.player)
@@ -54,26 +64,49 @@ class Game:
         #Game loop
     def update(self):
         self.all_sprites.update()
-        #keys = pg.key.get_pressed()
         hits = pg.sprite.spritecollide(self.player, self.enemies, False)
-        bullethits = pg.sprite.spritecollideany(self.bullet, self.enemies, False)
+        bulletmobhits = pg.sprite.groupcollide(self.pbullets, self.enemies, True, True)
+        obstaclehits = pg.sprite.groupcollide(self.pbullets, self.obstacles, True, True)
         if hits:
             print("took damage")
-        if bullethits:
-            print(bullethits)
-        # if keys[pg.K_SPACE]:
-        #     self.shoot()
+            self.running = False
+        
+        if obstaclehits:
+            self.bullet.kill()
+            #???????? why is it also killing the sprite?????
+
+        if bulletmobhits:
+            print("impact")
+            self.bullet.kill()
+            for hit in bulletmobhits:
+                self.score += 1
+                print(self.score)
+                r = SmallRocks()
+                s = Enemy1()
+                self.all_sprites.add(r)
+                self.all_sprites.add(s)
+                self.enemies.add(r)
+                self.enemies.add(s)
+                #Unintended side effect: every mob destroyed spawns itself back as well as the other sprite
+                # ie shooting an enemy spawns the enemy back as well as another rock
+                #might as well keep it for scaling difficulty
+                # but then have to up gun ROF
             
-        #     self.all_sprites.add(self.pbullet)
-        #     self.pbullets.add(self.pbullet)
-        
-        #Update things
     def shoot(self):
-        bullet = PBullet(self.player.rect.centerx, self.player.rect.top)
-        self.pbullets.add(bullet)
-        self.all_sprites.add(bullet)
+        print("bang")
+        self.all_sprites.add(self.bullet)
+        self.pbullets.add(self.bullet)
+        self.bullet.rect.x = self.player.rect.x + 12.5
+        self.bullet.rect.y = self.player.rect.y 
+
+        # if self.bullet.rect.y < 0:
+        #     print(self.bullet.rect.y)
         
-        print("shotfired " + str(self.player.rect.centerx) + " " + str(self.player.rect.top))
+        # bullet = PBullet(self.player.rect.centerx, self.player.rect.top)
+        # self.pbullets.add(bullet)
+        # self.all_sprites.add(bullet)
+        
+        # print("shotfired " + str(self.player.rect.centerx) + " " + str(self.player.rect.top))
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -81,9 +114,9 @@ class Game:
                     self.playing = False
                 self.running = False
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
+                if event.key == pg.K_SPACE and not self.pbullets.has(self.bullet):
                     self.shoot()
-        
+            #This fires only once/press. semi-auto.
         #Listening for user input/events
     def draw(self):
         self.screen.fill(BLACK)
