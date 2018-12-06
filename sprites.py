@@ -12,7 +12,7 @@ from os import path
 class Player(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        player_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\playership.gif')
+        player_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\playership.png')
         #self.image = pg.Surface((30, 30))
         self.image = player_img
         #self.image.fill(RED)
@@ -88,25 +88,14 @@ class Stars(Sprite):
 class SmallRocks(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        self.image = pg.Surface((40, 40))
-        self.image.fill(BLUE)
+        smallrock_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\spacerock.png')
+        #self.image = pg.Surface((40, 40))
+        #self.image.fill(BLUE)
+        self.image = smallrock_img
+        self.image = pg.transform.scale(smallrock_img, (40, 40))
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-450, -50)
-        self.vy = random.randrange(3, 8)
-    def update(self):
-        self.rect.y += self.vy
-        if self.rect.top > HEIGHT + 10:
-            self.rect.x = random.randrange(WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-450, -50)
-            self.vy = random.randrange(3, 8)
-
-class BigRocks(Sprite):
-    def __init__(self):
-        Sprite.__init__(self)
-        self.image = pg.Surface((50, 50))
-        self.image.fill(BLUE)
-        self.rect = self.image.get_rect()
+        self.image.set_colorkey(BLACK)
+        
         self.rect.x = random.randrange(WIDTH - self.rect.width)
         self.rect.y = random.randrange(-450, -50)
         self.vy = random.randrange(3, 8)
@@ -125,10 +114,13 @@ class Enemy1(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(WIDTH - self.rect.width)
         self.rect.y = random.randrange(-450, -50)
-        self.vy = random.randrange(3, 8)
+        self.vy = random.randrange(4, 8)
+        self.vx = random.randrange(-2, 2)
     def update(self):
         self.rect.y += self.vy
-        if self.rect.top > HEIGHT + 10:
+        self.rect.x += self.vx
+        if self.rect.top > HEIGHT + 10 or self.rect.left < -20 or self.rect.right > WIDTH + 20:
             self.rect.x = random.randrange(WIDTH - self.rect.width)
             self.rect.y = random.randrange(-450, -50)
-            self.vy = random.randrange(3, 8)
+            self.vy = random.randrange(4, 8)
+            self.vx = random.randrange(-2, 2)

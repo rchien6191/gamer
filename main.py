@@ -8,8 +8,6 @@ from settings import *
 from sprites import *
 from os import path
 
-#img_dir = path.join(path.dirname(__file__), '_images')
-#player_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\playership.gif')
 
 class Game:
     def __init__(self):
@@ -37,14 +35,10 @@ class Game:
         for i in range(20):
             m = Stars()
             self.all_sprites.add(m)
-        for i in range (8):   
+        for i in range (10):   
             r = SmallRocks()
             self.obstacles.add(r)
             self.all_sprites.add(r)
-        # for i in range (3):
-        #     b = BigRocks()
-        #     self.all_sprites.add(b)
-        #     self.indestruct.add(b)
         for i in range (4):
             s = Enemy1()
             self.enemies.add(s)
@@ -77,6 +71,9 @@ class Game:
 
         if obstaclehits:
             self.bullet.kill()
+            r = SmallRocks()
+            self.all_sprites.add(r)
+            self.obstacles.add(r)
 
         if bulletmobhits:
             print("impact")
