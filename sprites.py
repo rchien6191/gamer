@@ -12,14 +12,15 @@ from os import path
 class Player(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        #self.image = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\playership.gif')
-        self.image = pg.Surface((30, 30))
-        #self.sprite = player_img
-        self.image.fill(RED)
+        player_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\playership.gif')
+        #self.image = pg.Surface((30, 30))
+        self.image = player_img
+        #self.image.fill(RED)
+        self.image = pg.transform.scale(player_img, (40, 30))
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         #self.sprite = self.image.get_image()
-        self.rect.center = (WIDTH/2, HEIGHT/2)
-        #Sprite will be implemented at some point
+        self.rect.center = (WIDTH/2, (3*HEIGHT)/4)
         self.accel = 3.95
         self.vx = 0
         self.vy = 0
