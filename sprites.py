@@ -91,20 +91,33 @@ class SmallRocks(Sprite):
         smallrock_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\spacerock.png')
         #self.image = pg.Surface((40, 40))
         #self.image.fill(BLUE)
-        self.image = smallrock_img
+        self.image_orig = smallrock_img
+        self.image_orig.set_colorkey(BLACK)
+        self.image = self.image_orig.copy()
+        #self.image = smallrock_img
         self.image = pg.transform.scale(smallrock_img, (40, 40))
+        self.image_orig = pg.transform.scale(smallrock_img, (40, 40))
         self.rect = self.image.get_rect()
         self.image.set_colorkey(BLACK)
-        
         self.rect.x = random.randrange(WIDTH - self.rect.width)
         self.rect.y = random.randrange(-450, -50)
         self.vy = random.randrange(3, 8)
+        self.rot = 0
+        self.rot_spd = random.randrange(-4, 4)
+        self.last_update = pg.time.get_ticks()
     def update(self):
         self.rect.y += self.vy
+        self.rotate()
         if self.rect.top > HEIGHT + 10:
             self.rect.x = random.randrange(WIDTH - self.rect.width)
             self.rect.y = random.randrange(-450, -50)
             self.vy = random.randrange(3, 8)
+    def rotate(self):
+        now = pg.time.get_ticks()
+        if now - self.last_update > 50:
+            self.last_update = now
+            self.rot = (self.rot + self.rot_spd) % 360
+            self.image = pg.transform.rotate(self.image_orig, self.rot)
 
 class Enemy1(Sprite):
     def __init__(self):

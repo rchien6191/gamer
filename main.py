@@ -89,8 +89,6 @@ class Game:
                 self.enemies.add(s)
                 #Unintended side effect: every mob destroyed spawns itself back as well as the other sprite
                 # ie shooting an enemy spawns the enemy back as well as another rock
-                #might as well keep it for scaling difficulty
-                # but then have to up gun ROF
             
     def shoot(self):
         #print("bang")
@@ -109,8 +107,19 @@ class Game:
                 if event.key == pg.K_SPACE and not self.pbullets.has(self.bullet):
                     self.shoot()
 
+    def draw_text(self, surf, text, size, x, y):
+        font_name = pg.font.match_font('arial')
+        font = pg.font.Font(font_name, size)
+        text_surface = font.render(text, True, WHITE)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        self.surface.blit(text_surface, text_rect)
+
     def draw(self):
         self.screen.fill(BLACK)
+        self.screen.blit(self.background, self.background_rect)
+        self.all_sprites.draw(self.screen)
+        self.draw_text(self.screen, str(self.score), 18, (WIDTH / 2), 10)
         self.all_sprites.draw(self.screen)
         pg.display.flip()
     def show_start_screen(self):
