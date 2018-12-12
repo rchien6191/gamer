@@ -15,6 +15,7 @@ class Game:
         #Init pygame
         pg.init()
         pg.mixer.init()
+        pg.font.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption("flying")
         self.clock = pg.time.Clock()
@@ -53,6 +54,7 @@ class Game:
         while self.playing:
             self.clock.tick(FPS)
             self.events()
+            #self.score()
             self.update()
             self.draw()
         #Game loop
@@ -87,15 +89,16 @@ class Game:
                 self.all_sprites.add(s)
                 self.obstacles.add(r)
                 self.enemies.add(s)
-                #Unintended side effect: every mob destroyed spawns itself back as well as the other sprite
-                # ie shooting an enemy spawns the enemy back as well as another rock
+                # difficulty scaling?: Each object destroyed spawns it back as well as the other type available
+                # ie: shooting a satellite spawns both a satellite and a rock, and vice versa. 
+                # It gradually gets harder
             
-    def shoot(self):
-        #print("bang")
-        self.all_sprites.add(self.bullet)
-        self.pbullets.add(self.bullet)
-        self.bullet.rect.x = self.player.rect.x + 17.5
-        self.bullet.rect.y = self.player.rect.y 
+    # def shoot(self):
+    #     #print("bang")
+    #     self.all_sprites.add(self.bullet)
+    #     self.pbullets.add(self.bullet)
+    #     self.bullet.rect.x = self.player.rect.x + 17.5
+    #     self.bullet.rect.y = self.player.rect.y  
 
     def events(self):
         for event in pg.event.get():
@@ -105,22 +108,23 @@ class Game:
                 self.running = False
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE and not self.pbullets.has(self.bullet):
-                    self.shoot()
+                    Player.shoot(self)
+                    #self.shoot()
+            #The shoot funtion here took way too long to figure out. Currently, it mostly works, but is capped to 
+            #one player bullet on screen at any one time. 
+            #It only seems to work with the 'and not self' part tacked on?
 
-    def draw_text(self, surf, text, size, x, y):
-        font_name = pg.font.match_font('arial')
-        font = pg.font.Font(font_name, size)
-        text_surface = font.render(text, True, WHITE)
-        text_rect = text_surface.get_rect()
-        text_rect.midtop = (x, y)
-        self.surface.blit(text_surface, text_rect)
+    def draw_text(self, screen):
+        myFont = pg.font.SysFont('monospace', 30)
+        scoretext = myFont.render('Score: ' + str(self.score), False, WHITE)
+        self.screen.blit(scoretext, (20,30))
 
     def draw(self):
         self.screen.fill(BLACK)
-        self.screen.blit(self.background, self.background_rect)
+        #self.screen.blit(self.textsurface, (0, 0))
         self.all_sprites.draw(self.screen)
-        self.draw_text(self.screen, str(self.score), 18, (WIDTH / 2), 10)
         self.all_sprites.draw(self.screen)
+        self.draw_text(self.screen)
         pg.display.flip()
     def show_start_screen(self):
         pass

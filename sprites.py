@@ -4,7 +4,7 @@
 import pygame as pg
 from pygame.sprite import Sprite
 import random
-#import main
+
 from settings import *
 import math
 from os import path
@@ -12,24 +12,20 @@ from os import path
 class Player(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        player_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\playership.png')
-        #self.image = pg.Surface((30, 30))
+        # playersprite = "C:\_assets\playership.png"
+        # player_img = pg.image.load(playersprite)
+        player_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\project\gamer\_assets\playership.png')
+        #I'm not sure what the 'r' before the filepath does but it only really works with the 'r'?
+        #It was part of some advice on stackoverflow.
+        #shoot_sound = pg.mixer.Sound(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_assets\laser4.wav')
         self.image = player_img
-        #self.image.fill(RED)
         self.image = pg.transform.scale(player_img, (40, 30))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        #self.sprite = self.image.get_image()
         self.rect.center = (WIDTH/2, (3*HEIGHT)/4)
         self.accel = 3.95
         self.vx = 0
         self.vy = 0
-
-    # def shoot(self):
-    #     bullet = PBullet()
-    #     print("bang")
-    #     # Game.all_sprites.add(bullet)
-    #     # Game.pbullets.add(bullet)
 
     def update(self):
         self.vx = 0
@@ -43,14 +39,19 @@ class Player(Sprite):
             self.vy = -7
         if keys[pg.K_DOWN]:
             self.vy = 7
-        # if keys[pg.K_SPACE]:
-        #     self.shoot()
         self.rect.x += self.vx
         self.rect.y += self.vy
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
+
+    def shoot(self):
+        #print("bang")
+        self.all_sprites.add(self.bullet)
+        self.pbullets.add(self.bullet)
+        self.bullet.rect.x = self.player.rect.x + 17.5
+        self.bullet.rect.y = self.player.rect.y
 
 class PBullet(Sprite):
     def __init__(self, x, y):
@@ -88,7 +89,7 @@ class Stars(Sprite):
 class SmallRocks(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        smallrock_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_images\spacerock.png')
+        smallrock_img = pg.image.load(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\project\gamer\_assets\spacerock.png')
         #self.image = pg.Surface((40, 40))
         #self.image.fill(BLUE)
         self.image_orig = smallrock_img
