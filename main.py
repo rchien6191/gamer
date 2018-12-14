@@ -6,7 +6,6 @@ import pygame as pg
 import random
 from settings import *
 from sprites import *
-from os import path
 
 
 class Game:
@@ -61,7 +60,10 @@ class Game:
     def update(self):
         self.all_sprites.update()
         hits1 = pg.sprite.spritecollide(self.player, self.enemies, False)
-        hits2 = pg.sprite.spritecollide(self.player, self.obstacles, False)
+        #The ships aren't common enough to require advanced collisions...?
+        hits2 = pg.sprite.spritecollide(self.player, self.obstacles, False, pg.sprite.collide_circle)
+        #The hitboxes should? be better, with circle type collisions? Hard to tell, difficult to 
+        # graze the rocks due to their rotations/x movement
         bulletmobhits = pg.sprite.groupcollide(self.pbullets, self.enemies, True, True)
         obstaclehits = pg.sprite.groupcollide(self.pbullets, self.obstacles, True, True)
         if hits1:
@@ -70,7 +72,7 @@ class Game:
         if hits2:
             print("took damage")
             self.running = False
-
+            
         if obstaclehits:
             self.bullet.kill()
             r = SmallRocks()
@@ -112,7 +114,9 @@ class Game:
                     #self.shoot()
             #The shoot funtion here took way too long to figure out. Currently, it mostly works, but is capped to 
             #one player bullet on screen at any one time. 
-            #It only seems to work with the 'and not self' part tacked on?
+            #12/13/18 I'm still not sure how it's working placed in the Player class, but I'll take it
+            # If things go bad the legacy version is just above, uncomment the shoot function and self.shoot()
+            #It only seems to work with the 'and not self' part tacked on, which is what's limiting the bullet count
 
     def draw_text(self, screen):
         myFont = pg.font.SysFont('monospace', 30)
@@ -121,7 +125,6 @@ class Game:
 
     def draw(self):
         self.screen.fill(BLACK)
-        #self.screen.blit(self.textsurface, (0, 0))
         self.all_sprites.draw(self.screen)
         self.all_sprites.draw(self.screen)
         self.draw_text(self.screen)
