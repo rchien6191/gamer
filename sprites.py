@@ -181,12 +181,13 @@ class Explosion(pg.sprite.Sprite):
         self.frame = 0
         self.last_update = pg.time.get_ticks()
         self.frame_rate = 50
-#Runs through the individual frames based on framerate: above is setup
+#Runs through the individual frames based on framerate: above is setup, as always
     def update(self):
         now = pg.time.get_ticks()
         if now - self.last_update > self.frame_rate:
             self.last_update = now
             self.frame += 1
+            #Progress through the frames/images one at a time. 
             if self.frame == len(explosion_anim[self.size]):
                 self.kill()
                 #When the frames run out, kill the sprite
