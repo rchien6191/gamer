@@ -4,7 +4,6 @@
 import pygame as pg
 from pygame.sprite import Sprite
 import random
-
 from settings import *
 import math
 import os
@@ -28,7 +27,7 @@ class Player(Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH/2, (3*HEIGHT)/4)
         self.radius = 15
-        pg.draw.circle(self.image, WHITE, self.rect.center, self.radius)
+        #pg.draw.circle(self.image, WHITE, self.rect.center, self.radius)
         self.accel = 3.95
         self.vx = 0
         self.vy = 0
@@ -112,7 +111,7 @@ class SmallRocks(Sprite):
         self.rect = self.image.get_rect()
         self.image.set_colorkey(BLACK)
         self.radius = int(self.rect.width / 2)
-        pg.draw.circle(self.image, RED, self.rect.center, self.radius)
+        #pg.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.rect.x = random.randrange(WIDTH - self.rect.width)
         self.rect.y = random.randrange(-450, -50)
         self.vy = random.randrange(3, 8)
@@ -142,6 +141,7 @@ class Enemy1(Sprite):
         self.image = enemy1img
         self.image = pg.transform.scale(enemy1img, (30, 30))
         self.image.set_colorkey(BLACK)
+        self.radius = 15
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(WIDTH - self.rect.width)
         self.rect.y = random.randrange(-450, -50)
@@ -156,3 +156,43 @@ class Enemy1(Sprite):
             self.rect.y = random.randrange(-450, -50)
             self.vy = random.randrange(4, 8)
             self.vx = random.randrange(-2, 2)
+
+
+#Explosions. Adapted from kidscancode, mostly. 
+#for loop loads regularExplosion0{}.png, with numbers 0-9 in {}, then adds them to explosion_anim['fire'] list
+explosion_anim = {}
+explosion_anim['fire'] = []
+for i in range(9):
+    filename = 'regularExplosion0{}.png'.format(i)
+    img = pg.image.load(os.path.join('_assets\explosions', filename))
+    img.set_colorkey(BLACK)
+    img_fire = pg.transform.scale(img, (35, 35))
+    explosion_anim['fire'].append(img_fire)
+#Why 'fire': plan to have a different, more "dusty" break animation for the rocks
+#Just not sure where to find one or how to make one....
+
+class Explosion(pg.sprite.Sprite):
+    def __init__(self, center, size):
+        pg.sprite.Sprite.__init__(self)
+        self.size = size
+        self.image = explosion_anim[self.size][0]
+        self.rect = self.image.get_rect()
+        self.rect.center = center
+        self.frame = 0
+        self.last_update = pg.time.get_ticks()
+        self.frame_rate = 50
+#Runs through the individual frames based on framerate: above is setup
+    def update(self):
+        now = pg.time.get_ticks()
+        if now - self.last_update > self.frame_rate:
+            self.last_update = now
+            self.frame += 1
+            if self.frame == len(explosion_anim[self.size]):
+                self.kill()
+                #When the frames run out, kill the sprite
+            else:
+                center = self.rect.center
+                self.image = explosion_anim[self.size][self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.center = center
+                #coordinate where the frames center, which should be the the site of ship destruction.

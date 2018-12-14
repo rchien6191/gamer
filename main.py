@@ -1,12 +1,20 @@
 #This file is by Robert Chien
-#Some material taken from KidsCanCode and Mr. Cozort
-#http://kidscancode.org/blog/2016/08/pygame_shmup_part_4/ <--- see this!
+#Sources: KidsCanCode and Mr. Cozort
 
 import pygame as pg
 import random
 from settings import *
 from sprites import *
 
+#Gameplay ideas: schmup, two varieties of non-player mobs: asteroids (no point value) and ships (point value)
+#Cosmetics: Graphics, explosion animations (ship hit), sounds?
+#Planned features: score system, shooting, random spawning, difficulty scaling, animations, sounds, graphics, health system, game over screen
+#Accomplished: score system, shooting, random spawning, random spawning, difficulty scaling, graphics
+#Bugs: clunky shooting mechanics (see Player class, sprites.py for more details), visual collision bugs, 
+
+
+#Personal Note, 12/14/18: I thought I'd get a lot more implemented, but a surpisingly large amount of time was spent 
+# troubleshooting, especially the shooting / graphics implementation
 
 class Game:
     def __init__(self):
@@ -27,7 +35,7 @@ class Game:
         
         self.obstacles = pg.sprite.Group()
         self.indestruct = pg.sprite.Group()
-        
+        #All the sprites and their groups. Ready for collisions.
         self.player = Player()
         self.enemy1 = Enemy1()
         self.bullet = PBullet(self.player.rect.centerx, self.player.rect.top)
@@ -58,9 +66,9 @@ class Game:
             self.draw()
         #Game loop
     def update(self):
+        #Collisions
         self.all_sprites.update()
-        hits1 = pg.sprite.spritecollide(self.player, self.enemies, False)
-        #The ships aren't common enough to require advanced collisions...?
+        hits1 = pg.sprite.spritecollide(self.player, self.enemies, False, pg.sprite.collide_circle)
         hits2 = pg.sprite.spritecollide(self.player, self.obstacles, False, pg.sprite.collide_circle)
         #The hitboxes should? be better, with circle type collisions? Hard to tell, difficult to 
         # graze the rocks due to their rotations/x movement
@@ -87,6 +95,8 @@ class Game:
                 print(self.score)
                 r = SmallRocks()
                 s = Enemy1()
+                exp = Explosion(hit.rect.center, 'fire')
+                self.all_sprites.add(exp)
                 self.all_sprites.add(r)
                 self.all_sprites.add(s)
                 self.obstacles.add(r)
@@ -112,13 +122,14 @@ class Game:
                 if event.key == pg.K_SPACE and not self.pbullets.has(self.bullet):
                     Player.shoot(self)
                     #self.shoot()
-            #The shoot funtion here took way too long to figure out. Currently, it mostly works, but is capped to 
+            #The shoot function here took way too long to figure out. Currently, it mostly works, but is capped to 
             #one player bullet on screen at any one time. 
             #12/13/18 I'm still not sure how it's working placed in the Player class, but I'll take it
             # If things go bad the legacy version is just above, uncomment the shoot function and self.shoot()
             #It only seems to work with the 'and not self' part tacked on, which is what's limiting the bullet count
 
     def draw_text(self, screen):
+        #The score display
         myFont = pg.font.SysFont('monospace', 30)
         scoretext = myFont.render('Score: ' + str(self.score), False, WHITE)
         self.screen.blit(scoretext, (20,30))
