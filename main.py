@@ -9,7 +9,7 @@ from sprites import *
 #Gameplay ideas: schmup, two varieties of non-player mobs: asteroids (no point value) and ships (point value)
 #Cosmetics: Graphics, explosion animations (ship hit), sounds?
 #Planned features: score system, shooting, random spawning, difficulty scaling, animations, sounds, graphics, health system, game over screen
-#Accomplished: score system, shooting, random spawning, random spawning, difficulty scaling, graphics
+#Accomplished: score system, shooting, random spawning, random spawning, difficulty scaling, graphics, limited animations
 #Bugs: clunky shooting mechanics (see Player class, sprites.py for more details), visual collision bugs, 
 
 
@@ -77,9 +77,17 @@ class Game:
         if hits1:
             print("took damage")
             self.running = False
+            for hit in hits1:
+                self.player.health -= hit.radius / 4
+                if self.player.health <= 0:
+                    self.running = False
         if hits2:
             print("took damage")
-            self.running = False
+            print (self.player.health)
+            for hit in hits2:
+                self.player.health -= hit.radius / 4
+                if self.player.health <= 0:
+                    self.running = False
             
         if obstaclehits:
             self.bullet.kill()
@@ -133,12 +141,25 @@ class Game:
         myFont = pg.font.SysFont('monospace', 30)
         scoretext = myFont.render('Score: ' + str(self.score), False, WHITE)
         self.screen.blit(scoretext, (20,30))
+    
+    def draw_health_bar(self, surf, x, y, pct):
+        if pct<0:
+            pct = 0
+            #pct: which value to measure for the rectangle drawing
+        Health_length = 100
+        Health_height = 10
+        fill = (pct/100) * Health_length
+        outline_rect = pg.Rect(x, y, Health_length, Health_height)
+        fill_rect = pg.Rect(x, y, fill, Health_height)
+        pg.draw.rect(surf, GREEN, fill_rect)
+        pg.draw.rect(surf, WHITE, outline_rect, 2)
 
     def draw(self):
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
         self.all_sprites.draw(self.screen)
         self.draw_text(self.screen)
+        self.draw_health_bar(self.screen, 400 , HEIGHT/16, self.player.health)
         pg.display.flip()
     def show_start_screen(self):
         pass

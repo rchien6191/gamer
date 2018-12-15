@@ -19,7 +19,7 @@ class Player(Sprite):
         #player_img = pg.image.load('\_assets\playership2.png')
         #solved!
         player_img = pg.image.load(os.path.join('_assets', 'playership2.png'))
-
+        self.health = 100
         #shoot_sound = pg.mixer.Sound(r'C:\Users\Robert.Chien19\OneDrive - Bellarmine College Preparatory\intro_to_programming\chien_robert\_assets\laser4.wav')
         self.image = player_img
         self.image = pg.transform.scale(player_img, (40, 30))
@@ -70,7 +70,7 @@ class PBullet(Sprite):
         self.rect = self.image.get_rect()
         self.rect.bottom = self.rect.y
         self.rect.centerx = self.rect.x
-        self.vy = -25
+        self.vy = -30
     def update(self):
         self.rect.y += self.vy
         if self.rect.y < 0 :
@@ -181,7 +181,7 @@ class Explosion(pg.sprite.Sprite):
         self.frame = 0
         self.last_update = pg.time.get_ticks()
         self.frame_rate = 50
-#Runs through the individual frames based on framerate: above is setup, as always
+    #Runs through the individual frames based on framerate: above is setup, as always
     def update(self):
         now = pg.time.get_ticks()
         if now - self.last_update > self.frame_rate:
@@ -197,3 +197,5 @@ class Explosion(pg.sprite.Sprite):
                 self.rect = self.image.get_rect()
                 self.rect.center = center
                 #coordinate where the frames center, which should be the the site of ship destruction.
+
+#placeholder
