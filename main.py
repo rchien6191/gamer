@@ -27,6 +27,7 @@ class Game:
         pg.display.set_caption("flying")
         self.clock = pg.time.Clock()
         self.running = True
+        self.game_over = False
     def new(self):
         self.score = 0
         self.playersprite = pg.sprite.Group()
@@ -81,6 +82,7 @@ class Game:
                 self.player.health -= hit.radius / 4
                 if self.player.health <= 0:
                     self.running = False
+                    self.game_over = True
         if hits2:
             print("took damage")
             print (self.player.health)
@@ -88,6 +90,7 @@ class Game:
                 self.player.health -= hit.radius / 4
                 if self.player.health <= 0:
                     self.running = False
+                    self.game_over = True
             
         if obstaclehits:
             self.bullet.kill()
@@ -163,11 +166,27 @@ class Game:
         pg.display.flip()
     def show_start_screen(self):
         pass
-    def show_go (self):
-        pass
+    
+
+    def game_over_screen (self):
+        #self.screen.blit(self.background, self.background_rect)
+        pg.draw_text(self.screen, "Press any key to begin", 18, WIDTH/2, HEIGHT/2)
+        pg.display.flip()
+        waiting = True
+        while waiting:
+            self.clock(FPS)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                if event.type == pg.KEYUP:
+                    self.waiting = False
 g = Game()
-g.show_start_screen()
+
 
 while g.running:
     g.new()
-    g.show_start_screen()
+    
+    if g.game_over == True:
+        g.game_over_screen()
+        g.game_over == False
+        g.score = 0

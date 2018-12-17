@@ -12,4 +12,5 @@ GREEN = (124, 252, 0)
 #White for the stars
 #Black for general use
 #Red for testing
+#Green for health bar
 #Blue, Yellow, Green: placeholder colors for rocks, lasers, ships respectively
